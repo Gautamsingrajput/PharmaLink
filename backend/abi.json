@@ -1,0 +1,668 @@
+[
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "temp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "humidity",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "hindex",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "pid",
+                "type": "uint256"
+            }
+        ],
+        "name": "AddData",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "price",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "description",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "reqtemp",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "manufacturing",
+                "type": "string"
+            }
+        ],
+        "name": "AddProduct",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "location",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "temp",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "humidity",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "heatindex",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "wid",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "pid",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "total_quantity",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "flag",
+                "type": "bool"
+            }
+        ],
+        "name": "AddStatus",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "Data_list",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "temp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "humidity",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "hindex",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "pid",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "data",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "temp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "humidity",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "hindex",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "pid",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getProductData",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "temp",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "humidity",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "hindex",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "pid",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct Supplychain.Data[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getProductStatus",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "location",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "timestamp",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "temp",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "humidity",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "heatindex",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "w_id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "p_id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "total_quantity",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "flag",
+                        "type": "bool"
+                    }
+                ],
+                "internalType": "struct Supplychain.Status[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getProducts",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "price",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "reqtemp",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "manufacturing",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "timestamp",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct Supplychain.Product[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getWorkerssList",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "timestamp",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct Supplychain.Worker[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "productStatus",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "location",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "temp",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "humidity",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "heatindex",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "w_id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "p_id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "total_quantity",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "flag",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "product_Status",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "location",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "temp",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "humidity",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "heatindex",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "w_id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "p_id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "total_quantity",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "flag",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "products",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "price",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "description",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "reqtemp",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "manufacturing",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "products_list",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "price",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "description",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "reqtemp",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "manufacturing",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            }
+        ],
+        "name": "setWorker",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "workers",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "workers_list",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

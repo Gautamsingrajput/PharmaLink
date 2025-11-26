@@ -1,0 +1,13 @@
+web3==5.31.3
+python version 3.10
+py -3.10 -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+
+Portal:
+http://127.0.0.1:8000/docs#
+
+Alcemey - RPC LINK Polygon Amoy Testnet
+SmartContract - Remix IDE 
+Wallet - Metamask

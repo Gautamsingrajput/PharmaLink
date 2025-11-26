@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+web3==5.31.3
+
