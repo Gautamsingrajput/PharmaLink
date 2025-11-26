@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
-const pages = ['Home', 'Products', 'Workers', 'Status', 'Data'];
+const pages = ['Home', 'Products', 'Workers', 'Status', 'Data', 'Admin'];
 
 const ResponsiveAppBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -93,8 +93,8 @@ const ResponsiveAppBar = () => {
             <button
               onClick={connectWallet}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${walletAddress
-                  ? 'bg-accent/10 border-accent/50 text-accent hover:bg-accent/20'
-                  : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:text-white'
+                ? 'bg-accent/10 border-accent/50 text-accent hover:bg-accent/20'
+                : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:text-white'
                 }`}
             >
               <AccountBalanceWalletIcon fontSize="small" />

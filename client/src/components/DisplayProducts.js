@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../config/contractConfig';
+import { QRCodeCanvas } from 'qrcode.react';
 
 const DisplayProducts = () => {
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedQr, setSelectedQr] = useState(null);
 
   const requestAccount = async () => {
     if (!window.ethereum) {
@@ -20,9 +22,24 @@ const DisplayProducts = () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
 
-      const data = await contract.getProducts();
-      console.log("Products:", data);
-      setProducts(data);
+      const productList = await contract.getProducts();
+
+      // Fetch status for each product to determine safety
+      const productsWithStatus = await Promise.all(productList.map(async (product) => {
+        const id = product[0];
+        try {
+          const statusHistory = await contract.getProductStatus(id);
+          // Check if any temperature reading exceeds 25 degrees
+          const isUnsafe = statusHistory.some(status => parseInt(status.temp) >= 25);
+          return { ...product, isSafe: !isUnsafe };
+        } catch (err) {
+          console.error(`Error fetching status for product ${id}:`, err);
+          return { ...product, isSafe: true }; // Default to safe if no status or error
+        }
+      }));
+
+      console.log("Products with safety:", productsWithStatus);
+      setProducts(productsWithStatus);
     } catch (error) {
       console.error("Error fetching products:", error);
       alert("Failed to fetch products. Check console for details.");
@@ -64,6 +81,7 @@ const DisplayProducts = () => {
                     <th className="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider">Price</th>
                     <th className="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider">Req. Temp</th>
                     <th className="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider">Mfg Date</th>
+                    <th className="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider">QR Code</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -76,10 +94,62 @@ const DisplayProducts = () => {
                       <td className="p-4 text-green-400 font-medium">₹{row[2]}</td>
                       <td className="p-4 text-orange-400">{row[4]}</td>
                       <td className="p-4 text-gray-400">{row[5]}</td>
+                      <td className="p-4">
+                        <button
+                          onClick={() => setSelectedQr({
+                            value: `Product: ${row[1]}\nID: ${parseInt(row[0]._hex)}\nPrice: ${row[2]}\nStatus: ${row.isSafe ? 'SAFE' : 'UNSAFE'}\nMfg: ${row[5]}`,
+                            name: row[1]
+                          })}
+                          className="flex flex-col items-center gap-2 group"
+                        >
+                          <div className="p-2 bg-white rounded-lg group-hover:scale-105 transition-transform">
+                            <QRCodeCanvas
+                              value={`Product: ${row[1]}\nID: ${parseInt(row[0]._hex)}\nPrice: ${row[2]}\nStatus: ${row.isSafe ? 'SAFE' : 'UNSAFE'}\nMfg: ${row[5]}`}
+                              size={48}
+                              bgColor={"#ffffff"}
+                              fgColor={"#000000"}
+                              level={"L"}
+                              includeMargin={false}
+                            />
+                          </div>
+                          <span className="text-xs text-accent group-hover:text-white transition-colors">Click to Enlarge</span>
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* QR Code Modal */}
+        {selectedQr && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setSelectedQr(null)}>
+            <div className="bg-surface border border-white/10 rounded-2xl shadow-2xl p-8 max-w-sm w-full animate-in zoom-in-95 duration-200 flex flex-col items-center" onClick={e => e.stopPropagation()}>
+              <h3 className="text-2xl font-bold text-white mb-6 text-center">{selectedQr.name}</h3>
+
+              <div className="p-4 bg-white rounded-xl shadow-inner mb-6">
+                <QRCodeCanvas
+                  value={selectedQr.value}
+                  size={256}
+                  bgColor={"#ffffff"}
+                  fgColor={"#000000"}
+                  level={"M"}
+                  includeMargin={true}
+                />
+              </div>
+
+              <p className="text-gray-400 text-center text-sm mb-6">
+                Scan this code to view product details on your mobile device.
+              </p>
+
+              <button
+                onClick={() => setSelectedQr(null)}
+                className="px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium transition-colors"
+              >
+                Close
+              </button>
             </div>
           </div>
         )}

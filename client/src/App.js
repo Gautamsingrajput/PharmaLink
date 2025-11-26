@@ -7,6 +7,7 @@ import DisplayProducts from "./components/DisplayProducts.js";
 import DisplayWorkers from "./components/DisplayWorkers.js";
 import DisplayStatus from "./components/DisplayStatus.js";
 import DisplayData from "./components/DisplayData.js";
+import AdminPortal from "./components/AdminPortal.js";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/products" element={<DisplayProducts />} />
             <Route path="/status" element={<DisplayStatus />} />
             <Route path="/data" element={<DisplayData />} />
+            <Route path="/admin" element={<AdminPortal />} />
           </Routes>
         </div>
 

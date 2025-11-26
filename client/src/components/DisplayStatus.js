@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ethers } from 'ethers';
 import StatusModal from './StatusModal.js';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../config/contractConfig';
@@ -7,6 +8,7 @@ const DisplayStatus = () => {
   const [id, setId] = useState('');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
   const requestAccount = async () => {
     if (!window.ethereum) {
@@ -16,21 +18,29 @@ const DisplayStatus = () => {
     await window.ethereum.request({ method: "eth_requestAccounts" });
   };
 
-  const getStatus = async () => {
-    if (!id) {
-      alert("Please enter a Product ID");
-      return;
-    }
 
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const idParam = searchParams.get('id');
+    if (idParam) {
+      setId(idParam);
+      // We need to call getStatus but since state updates are async, 
+      // we should pass the id directly or use a separate effect.
+      // Better approach: refactor getStatus to accept an optional ID argument.
+      fetchStatus(idParam);
+    }
+  }, [location]);
+
+  const fetchStatus = async (productId) => {
+    if (!productId) return;
     setLoading(true);
     setData(null);
-
     try {
       await requestAccount();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-
-      const Sdata = await contract.getProductStatus(id);
+      const Sdata = await contract.getProductStatus(productId);
       console.log("Fetched status:", Sdata);
       setData(Sdata);
     } catch (error) {
@@ -40,6 +50,8 @@ const DisplayStatus = () => {
       setLoading(false);
     }
   };
+
+  const getStatus = () => fetchStatus(id);
 
   const convertTimestamp = (t) => {
     try {
