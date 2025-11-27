@@ -8,6 +8,7 @@ import DisplayWorkers from "./components/DisplayWorkers.js";
 import DisplayStatus from "./components/DisplayStatus.js";
 import DisplayData from "./components/DisplayData.js";
 import AdminPortal from "./components/AdminPortal.js";
+import MobileTracking from "./components/MobileTracking.js";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/status" element={<DisplayStatus />} />
             <Route path="/data" element={<DisplayData />} />
             <Route path="/admin" element={<AdminPortal />} />
+            <Route path="/track" element={<MobileTracking />} />
           </Routes>
         </div>
 

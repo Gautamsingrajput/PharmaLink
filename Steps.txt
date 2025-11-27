@@ -11,3 +11,7 @@ http://127.0.0.1:8000/docs#
 Alcemey - RPC LINK Polygon Amoy Testnet
 SmartContract - Remix IDE 
 Wallet - Metamask
+
+
+for esp32
+uvicorn main:app --reload --host 0.0.0.0 --port 5000

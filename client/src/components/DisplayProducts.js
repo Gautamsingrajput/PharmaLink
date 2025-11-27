@@ -97,14 +97,14 @@ const DisplayProducts = () => {
                       <td className="p-4">
                         <button
                           onClick={() => setSelectedQr({
-                            value: `Product: ${row[1]}\nID: ${parseInt(row[0]._hex)}\nPrice: ${row[2]}\nStatus: ${row.isSafe ? 'SAFE' : 'UNSAFE'}\nMfg: ${row[5]}`,
+                            value: `${window.location.origin}/track?id=${parseInt(row[0]._hex)}`,
                             name: row[1]
                           })}
                           className="flex flex-col items-center gap-2 group"
                         >
                           <div className="p-2 bg-white rounded-lg group-hover:scale-105 transition-transform">
                             <QRCodeCanvas
-                              value={`Product: ${row[1]}\nID: ${parseInt(row[0]._hex)}\nPrice: ${row[2]}\nStatus: ${row.isSafe ? 'SAFE' : 'UNSAFE'}\nMfg: ${row[5]}`}
+                              value={`${window.location.origin}/track?id=${parseInt(row[0]._hex)}`}
                               size={48}
                               bgColor={"#ffffff"}
                               fgColor={"#000000"}

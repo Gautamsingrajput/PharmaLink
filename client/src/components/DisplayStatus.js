@@ -7,6 +7,7 @@ import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../config/contractConfig';
 const DisplayStatus = () => {
   const [id, setId] = useState('');
   const [data, setData] = useState(null);
+  const [productInfo, setProductInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
 
@@ -41,8 +42,11 @@ const DisplayStatus = () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
       const Sdata = await contract.getProductStatus(productId);
+      const Pdata = await contract.products(productId);
       console.log("Fetched status:", Sdata);
+      console.log("Fetched product info:", Pdata);
       setData(Sdata);
+      setProductInfo(Pdata);
     } catch (error) {
       console.error("Error fetching status:", error);
       alert("Unable to fetch status. Check console for details.");
@@ -95,38 +99,90 @@ const DisplayStatus = () => {
             <p className="text-gray-400">Fetching status history...</p>
           </div>
         ) : data && data.length > 0 ? (
-          <div className="relative border-l-2 border-white/10 ml-4 md:ml-0 space-y-8">
+          <div className="relative border-l-4 border-white/10 ml-6 md:ml-10 space-y-12 pb-12">
+            {/* Product Header Info */}
+            {productInfo && (
+              <div className="mb-12 bg-surface p-6 rounded-xl border border-white/10 shadow-lg -ml-6 md:-ml-10 w-[calc(100%+24px)] md:w-[calc(100%+40px)]">
+                <h3 className="text-2xl font-bold text-white mb-2">{productInfo.name}</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-400">Required Temp:</span>
+                    <span className="ml-2 text-accent font-mono">{productInfo.reqtemp}°C</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400">Price:</span>
+                    <span className="ml-2 text-green-400">₹{productInfo.price}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {data.map((row, index) => {
               const temp = parseInt(row[2], 10);
-              const isSafe = temp < 25;
+              const reqTemp = productInfo ? parseInt(productInfo.reqtemp, 10) : 25; // Default to 25 if not found
+              const isSafe = temp <= reqTemp;
 
               return (
-                <div key={index} className="relative pl-8 md:pl-0">
-                  {/* Desktop Layout: Alternating sides could be done here, but keeping it simple left-aligned for now for consistency */}
-                  <div className="md:flex items-center justify-between group">
+                <div key={index} className="relative pl-8 md:pl-12">
+                  {/* Chain Connector Line */}
+                  <div className={`absolute -left-[11px] top-8 w-6 h-1 ${isSafe ? 'bg-green-500' : 'bg-red-500'} transition-colors duration-500`} />
 
-                    {/* Timeline Dot */}
-                    <div className="absolute -left-[9px] top-0 w-5 h-5 rounded-full border-4 border-background bg-accent shadow-[0_0_10px_#38bdf8]" />
+                  {/* Timeline Node */}
+                  <div className={`absolute -left-[21px] top-6 w-10 h-10 rounded-full border-4 border-background flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.5)] z-10 ${isSafe ? 'bg-green-500 shadow-green-500/50' : 'bg-red-500 shadow-red-500/50 animate-pulse'
+                    }`}>
+                    {isSafe ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </div>
 
-                    {/* Content Card */}
-                    <div className="bg-surface p-6 rounded-xl border border-white/10 hover:border-accent/30 transition-all shadow-lg w-full">
-                      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
-                        <h3 className="text-xl font-bold text-white">{row[0]}</h3>
-                        <span className="text-sm text-gray-400 font-mono mt-1 md:mt-0">
-                          {convertTimestamp(row.timestamp?._hex)}
+                  {/* Content Card */}
+                  <div className={`bg-surface p-6 rounded-xl border transition-all shadow-lg w-full group hover:scale-[1.02] duration-300 ${isSafe ? 'border-white/10 hover:border-green-500/30' : 'border-red-500/50 hover:border-red-500 shadow-red-900/20'
+                    }`}>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                          {row[0]}
+                          {!isSafe && (
+                            <span className="px-2 py-0.5 rounded text-xs font-bold bg-red-500 text-white animate-pulse">
+                              UNSAFE
+                            </span>
+                          )}
+                        </h3>
+                        <p className="text-sm text-gray-400 mt-1">Location Update</p>
+                      </div>
+                      <span className="text-sm text-gray-400 font-mono bg-black/30 px-3 py-1 rounded-lg border border-white/5 mt-2 md:mt-0">
+                        {convertTimestamp(row.timestamp?._hex)}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div className={`p-3 rounded-lg border ${isSafe ? 'bg-green-500/5 border-green-500/20' : 'bg-red-500/10 border-red-500/30'}`}>
+                        <span className="text-xs text-gray-400 block mb-1">Temperature</span>
+                        <span className={`text-lg font-mono font-bold ${isSafe ? 'text-green-400' : 'text-red-400'}`}>
+                          {row[2]}°C
                         </span>
+                        {!isSafe && <span className="text-xs text-red-400 block mt-1">Exceeded {productInfo?.reqtemp}°C</span>}
                       </div>
 
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${isSafe ? 'bg-green-500/10 text-green-400' : 'bg-orange-500/10 text-orange-400'
-                          }`}>
-                          Temperature: {row[2]}
-                        </div>
+                      <div className="p-3 rounded-lg border border-white/10 bg-white/5">
+                        <span className="text-xs text-gray-400 block mb-1">Humidity</span>
+                        <span className="text-lg font-mono text-blue-400">{row[3]}%</span>
                       </div>
 
-                      <div className="mt-2">
-                        <StatusModal statusData={row} />
+                      <div className="p-3 rounded-lg border border-white/10 bg-white/5">
+                        <span className="text-xs text-gray-400 block mb-1">Heat Index</span>
+                        <span className="text-lg font-mono text-orange-400">{row[4]}</span>
                       </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-white/10 flex justify-end">
+                      <StatusModal statusData={row} />
                     </div>
                   </div>
                 </div>

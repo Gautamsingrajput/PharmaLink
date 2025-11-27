@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
+import { CONTRACT_ADDRESS } from "../config/contractConfig";
 import SupplyChain from "../artifacts/contracts/SupplyChain.sol/Supplychain.json";
 
 const DisplayWorkers = () => {
   const [workersList, setWorkersList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ⚠️ Replace with your latest deployed contract address
-  const ContractAddress = "0x198b376638EC75E9f75e3ee1c7aC3abf236A5588";
+  const ContractAddress = CONTRACT_ADDRESS;
 
   const requestAccount = async () => {
     if (!window.ethereum) {

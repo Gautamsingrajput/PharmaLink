@@ -1,64 +1,70 @@
-#include "DHT.h"
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <DHT.h>
 
-#define DHTPIN 3     // Digital pin connected to the DHT sensor
+// 1. NETWORK CONFIGURATION
+const char* ssid = "Mobile";
+const char* password = "HP1234567890";
 
-#define DHTTYPE DHT11   // DHT 11
-//#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
-//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+// 2. BACKEND CONFIGURATION
+const char* serverName = "http://10.136.239.151:5000/product/data";
 
-// Connect pin 1 (on the left) of the sensor to +5V
-// NOTE: If using a board with 3.3V logic like an Arduino Due connect pin 1
-// to 3.3V instead of 5V!
-// Connect pin 2 of the sensor to whatever your DHTPIN is
-// Connect pin 4 (on the right) of the sensor to GROUND
-// Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
-
-// Initialize DHT sensor.
-// Note that older versions of this library took an optional third parameter to
-// tweak the timings for faster processors.  This parameter is no longer needed
-// as the current DHT reading algorithm adjusts itself to work on faster procs.
-`
+// 3. SENSOR CONFIGURATION
+#define DHTPIN 4
+#define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
+// 4. PRODUCT ID
+int productID = 2;
+
 void setup() {
-  Serial.begin(9600);
-  Serial.println(F("DHTxx test!"));
+  Serial.begin(115200);
+
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting to WiFi");
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  
+  Serial.println("\nConnected! IP Address: ");
+  Serial.println(WiFi.localIP());
 
   dht.begin();
 }
 
 void loop() {
-  // Wait a few seconds between measurements.
-  delay(2000);
+  delay(5000);
 
-  // Reading temperature or humidity takes about 250 milliseconds!
-  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float h = dht.readHumidity();
-  // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
-  // Read temperature as Fahrenheit (isFahrenheit = true)
-  float f = dht.readTemperature(true);
-
-  // Check if any reads failed and exit early (to try again).
-  if (isnan(h) || isnan(t) || isnan(f)) {
-    Serial.println(F("Failed to read from DHT sensor!"));
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Failed to read DHT!");
     return;
   }
 
-  // Compute heat index in Fahrenheit (the default)
-  float hif = dht.computeHeatIndex(f, h);
-  // Compute heat index in Celsius (isFahreheit = false)
   float hic = dht.computeHeatIndex(t, h, false);
 
-  Serial.print(F(" Humidity: "));
-  Serial.print(h);
-  Serial.print(F("%  Temperature: "));
-  Serial.print(t);
-  Serial.print(F("C "));
-  Serial.print(f);
-  Serial.print(F("F  Heat index: "));
-  Serial.print(hic);
-  Serial.print(F("C "));
-  Serial.print(hif);
-  Serial.println(F("F"));
+  if(WiFi.status() == WL_CONNECTED){
+    HTTPClient http;
+    
+    http.begin(serverName);
+    http.addHeader("Content-Type", "application/json");
+
+    String body = "{\"temp\":" + String((int)t) + 
+                  ",\"humidity\":" + String((int)h) +
+                  ",\"heatindex\":" + String((int)hic) +
+                  ",\"pid\":" + String(productID) + "}";
+
+    Serial.println("Sending: " + body);
+
+    int response = http.POST(body);
+    Serial.println(response);
+    Serial.println(http.getString());
+
+    http.end();
+  }
+  else {
+    Serial.println("WiFi Disconnected");
+  }
 }

@@ -84,3 +84,7 @@ def getProductData(pid):
 
 def getProducts():
     return deployed_contract.functions.getProducts().call()
+
+
+def getProduct(pid):
+    return deployed_contract.functions.products(pid).call()
