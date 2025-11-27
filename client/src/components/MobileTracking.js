@@ -92,6 +92,12 @@ const MobileTracking = () => {
         );
     }
 
+    const isShipmentCancelled = history.some(row => {
+        const temp = parseInt(row.temp || row[2]);
+        const reqTemp = parseInt(product.reqtemp);
+        return temp > reqTemp;
+    });
+
     return (
         <div className="min-h-screen bg-gray-900 text-white font-sans pb-12">
             {/* Header */}
@@ -102,16 +108,37 @@ const MobileTracking = () => {
 
             <div className="p-4 max-w-md mx-auto">
                 {/* Product Card */}
-                <div className="bg-gray-800 rounded-2xl p-6 mb-8 shadow-xl border border-gray-700">
+                <div className={`rounded-2xl p-6 mb-8 shadow-xl border ${isShipmentCancelled ? 'bg-red-900/20 border-red-500' : 'bg-gray-800 border-gray-700'
+                    }`}>
                     <div className="flex justify-between items-start mb-4">
                         <div>
                             <h2 className="text-2xl font-bold text-white">{product.name}</h2>
                             <p className="text-sm text-gray-400">ID: {parseInt(product.id._hex || product.id)}</p>
                         </div>
-                        <div className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold border border-blue-500/30">
-                            VERIFIED
-                        </div>
+                        {isShipmentCancelled ? (
+                            <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold border border-red-400 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                                CANCELLED
+                            </div>
+                        ) : (
+                            <div className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold border border-blue-500/30">
+                                VERIFIED
+                            </div>
+                        )}
                     </div>
+
+                    {isShipmentCancelled && (
+                        <div className="mb-4 bg-red-500/10 border border-red-500/50 p-3 rounded-lg flex items-start gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <p className="text-red-400 font-bold text-sm">Shipment Cancelled</p>
+                                <p className="text-red-300/80 text-xs mt-1">
+                                    Temperature limits were exceeded during transit. This product is unsafe for use.
+                                </p>
+                            </div>
+                        </div>
+                    )}
 
                     <div className="space-y-3 text-sm">
                         <div className="flex justify-between border-b border-gray-700 pb-2">
